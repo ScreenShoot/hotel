@@ -1,2 +1,2 @@
 # hotel
-Hotel Iksgroup
+Hotel Iks
