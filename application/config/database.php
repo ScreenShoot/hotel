@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
+
 /*
 | -------------------------------------------------------------------
 | DATABASE CONNECTIVITY SETTINGS
@@ -76,9 +80,9 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => '',
-	'password' => '',
-	'database' => '',
+	'username' => 'root',
+	'password' => 'satemadura',
+	'database' => 'ci',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -94,3 +98,21 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
+$capsule = new Capsule;
+$capsule->addConnection([
+	'driver'	=>	'mysql',
+	'host'      => $db['default']['hostname'],
+    'database'  => $db['default']['database'],
+    'username'  => $db['default']['username'],
+    'password'  => $db['default']['password'],
+    'charset'   => $db['default']['char_set'],
+    'collation' => $db['default']['dbcollat'],
+    'prefix'    => $db['default']['dbprefix'],
+]);
+
+$capsule->setEventDispatcher(new Dispatcher(new Container));
+
+$capsule->setAsGlobal();
+
+$capsule->bootEloquent();
